@@ -25,8 +25,8 @@ class BaseballAPI
         let year = Calendar.current.component(.year, from: Date())
         
         var components = DateComponents()
-        components.day = 10
-        components.month = 31
+        components.day = 31
+        components.month = 10
         components.year = year
         return Calendar.current.date(from: components) ?? Date()
     }
