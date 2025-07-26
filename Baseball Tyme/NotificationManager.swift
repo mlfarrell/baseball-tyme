@@ -35,7 +35,7 @@ class NotificationManager: NSObject {
             }
             content.sound = nil
             
-            let dateComponents = Calendar.current.dateComponents([.day, .month, .minute, .hour], from: Date())
+            let dateComponents = Calendar.current.dateComponents([.day, .month, .minute, .hour], from: game.gameDate)
             let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
             
             let uuidString = UUID().uuidString
