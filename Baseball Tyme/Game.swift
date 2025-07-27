@@ -14,8 +14,13 @@ struct Sport : Codable {
 }
 
 struct League : Codable {
+    let id: Int
     let name: String
     let link: URL?
+}
+
+struct Leagues: Codable {
+    let leagues: [League]
 }
 
 struct Teams : Codable {

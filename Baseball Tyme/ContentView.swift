@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import WidgetKit
 
 extension Game
 {
@@ -30,53 +31,91 @@ extension Game
 }
 
 struct ContentView: View {
-    let data: DataStore?
+    //let data: DataStore?
+    @Binding var data: DataStore
+    @State var configViewState = ConfigViewState()
     
-    func update() async -> Bool {
-        guard let data else { return false }
-        return await data.update()
+    func update() async throws {
+        try await data.update()
     }
     
     var body: some View {
         ZStack {
-            Image("Bg")
-                .saturation(0.2)
-                .imageScale(.large)
-                .foregroundStyle(.tint)
+            Color.clear.overlay {
+                Image("Bg")
+                    .resizable()
+                    .scaledToFill()
+                    .saturation(0.2)
+                    .edgesIgnoringSafeArea(.all)
+            }
             Rectangle()
                 .fill(
                     LinearGradient(gradient: Gradient(colors: [.white, .black]), startPoint: .top, endPoint: .bottom)
                 )
                 .blendMode(.screen)
+                .edgesIgnoringSafeArea(.all)
             
-            if data?.loading == false {
+            if data.loading == false {
                 VStack {
-                    Text(data?.team?.name ?? "Team Name")
-                        .font(Font.custom("American Typewriter", size: 24))
-                        .padding(.bottom, 5)
-                    if let game = data?.todaysGames?.first {
-                        let have = game.gameDate > Date() ? "have" : "had"
-                        Text("\(have) a game today at \(game.formattedDate ?? "")")
-                    } else {
-                        Text("do not play today")
+                    Spacer()
+                    VStack {
+                        Text(data.team?.name ?? "Team Name")
+                            .font(Font.custom("American Typewriter", size: 24))
+                            .padding(.bottom, 5)
+                        if let game = data.todaysGames?.first {
+                            let have = game.gameDate > Date() ? "have" : "had"
+                            Text("\(have) a game today at \(game.formattedDate ?? "")")
+                        } else {
+                            Text("do not play today")
+                        }
+                    }
+                    .foregroundColor(.black)
+                    .padding()
+                    .background(.white)
+                    .cornerRadius(14)
+                    
+                    Spacer()
+                    
+                    HStack {
+                        Spacer()
+                        
+                        Button {
+                            configViewState.isPresented = true
+                        } label: {
+                            Image(systemName: "gear")
+                                .resizable()
+                                .scaledToFit()
+                        }
+                        .frame(width: 50, height: 50)
+                        .tint(.white)
+                        .padding(.trailing, 35)
+                    }
+                    .onChange(of: data.currentTeamId) { oldValue, newValue in
+                        WidgetCenter.shared.reloadTimelines(ofKind: "ScheduleWidget")
                     }
                 }
-                .foregroundColor(.black)
-                .padding()
-                .background(.white)
-                .cornerRadius(14)
+                .sheet(isPresented: $configViewState.isPresented, onDismiss: didDismissEditor) {
+                    ConfigView(data: $data, config: $configViewState)
+                        .presentationDetents([.fraction(0.3)])
+                        .presentationBackground(.clear)
+                }
             } else {
                 ProgressView()
                     .controlSize(.extraLarge)
                     .progressViewStyle(.circular)
-                    .tint(Color(red: 0.2, green: 0.2, blue: 1.0))
+                    .tint(.white)
             }
-
         }
-        .padding()
+    }
+    
+    private func didDismissEditor() {
+        Task {
+            try await data.updateGames()
+        }
     }
 }
 
 #Preview {
-    ContentView(data: DataStore.mockStore)
+    @Previewable @State var data = DataStore.mockStore
+    ContentView(data: $data)
 }

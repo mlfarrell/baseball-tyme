@@ -21,12 +21,16 @@ struct Provider: TimelineProvider {
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
-        let nextGame = data.games?.first { game in
+        let n = 5
+        let nextNGames = data.games?.filter { game in
             game.gameDate > Date()
+        }[0..<n]
+        let entries = nextNGames?.map { game in
+            let roughGameEnd = Calendar.current.date(byAdding: .hour, value: 3, to: game.gameDate)
+            return SimpleEntry(date: roughGameEnd ?? game.gameDate, gameDate: game.gameDate)
         }
-        let entry = SimpleEntry(date: nextGame?.gameDate ?? Date(), gameDate: nextGame?.gameDate)
 
-        let timeline = Timeline(entries: [entry], policy: .atEnd)
+        let timeline = Timeline(entries: entries ?? [], policy: .atEnd)
         completion(timeline)
     }
 }

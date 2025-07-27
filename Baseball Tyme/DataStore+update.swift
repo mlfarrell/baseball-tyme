@@ -8,15 +8,30 @@
 import Foundation
 
 extension DataStore {
-    func update(fromDisk: Bool = true) async -> Bool {
-        if fromDisk && load() {
-            loading = false
+    func updateGames() async throws {
+        if let team = allTeams?.first(where: { $0.name.lowercased() == teamName.lowercased() }) {
+            self.team = team
+            self.games = try await BaseballAPI.getGames(for: team)
+            self.currentTeamId = team.id
+        }
+    }
+    
+    func update(fromDisk: Bool = true) async throws {
+        if fromDisk {
+            do {
+                try load()
+                loading = false
+            }
+            catch {
+                //carry on and load from API
+            }
         }
         
-        guard let teamResponse = await BaseballAPI.getTeam(named: teamName) else { return false }
-        self.team = teamResponse
-        self.games = await BaseballAPI.getGames(for: teamResponse)
+        let majorLeagues = try await BaseballAPI.getMajorLeagues()
+        let teamsResponse = try await BaseballAPI.getAllTeams(in: majorLeagues)
+        self.allTeams = teamsResponse
+
+        try await updateGames()
         loading = false
-        return true
     }
 }

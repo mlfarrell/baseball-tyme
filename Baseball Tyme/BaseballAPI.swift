@@ -7,6 +7,11 @@
 
 import Foundation
 
+enum APIError : Error
+{
+    case urlError
+}
+
 class BaseballAPI
 {
     static let baseURL = URL(string: "https://statsapi.mlb.com/api/v1/")!
@@ -36,19 +41,45 @@ class BaseballAPI
         formatter.dateFormat = "MM/dd/yyyy"
         return formatter
     }()
-
-    static func getTeam(named name: String) async -> Team? {
-        guard let url = URL(string: "teams", relativeTo: baseURL) else { return nil }
+    
+    static func getMajorLeagues() async throws -> [League] {
+        guard let url = URL(string: "leagues", relativeTo: baseURL) else { throw APIError.urlError }
         let request = URLRequest(url: url)
         
-        guard let (data, _) = try? await URLSession.shared.data(for: request) else { return nil }
-        guard let teams = try? JSONDecoder().decode(Teams.self, from: data) else { return nil }
+        let (data, _) = try await URLSession.shared.data(for: request)
+        let leagues = try JSONDecoder().decode(Leagues.self, from: data)
+        
+        return leagues.leagues.filter { league in
+            league.name.lowercased() == "american league" || league.name.lowercased() == "national league"
+        }
+    }
+    
+    static func getAllTeams(in leagues: [League]) async throws -> [Team] {
+        guard var url = URL(string: "teams", relativeTo: baseURL) else { throw APIError.urlError }
+        let leagueIds = leagues.map { "\($0.id)" }
+        url.append(queryItems: [
+            URLQueryItem(name: "leagueIds", value: leagueIds.joined(separator: ","))
+        ])
+    
+        let request = URLRequest(url: url)
+        let (data, _) = try await URLSession.shared.data(for: request)
+        let teams = try JSONDecoder().decode(Teams.self, from: data)
+        
+        return teams.teams
+    }
+
+    static func getTeam(named name: String) async throws -> Team? {
+        guard let url = URL(string: "teams", relativeTo: baseURL) else { throw APIError.urlError }
+        let request = URLRequest(url: url)
+        
+        let (data, _) = try await URLSession.shared.data(for: request)
+        let teams = try JSONDecoder().decode(Teams.self, from: data)
         
         return teams.teams.first { $0.name.lowercased() == name.lowercased() }
     }
     
-    static func getGames(for team: Team) async -> [Game]? {
-        guard var url = URL(string: "schedule/games", relativeTo: baseURL) else { return nil }
+    static func getGames(for team: Team) async throws -> [Game] {
+        guard var url = URL(string: "schedule/games", relativeTo: baseURL) else { throw APIError.urlError }
         url.append(queryItems: [
             URLQueryItem(name: "sportId", value: "1"),
             URLQueryItem(name: "teamId", value: "\(team.id)"),
@@ -57,13 +88,12 @@ class BaseballAPI
         ])
         
         let request = URLRequest(url: url)
-                
-        guard let (data, _) = try? await URLSession.shared.data(for: request) else { return nil }
+        let (data, _) = try await URLSession.shared.data(for: request)
+        
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
         
-        let schedule = try! decoder.decode(Schedule.self, from: data)
-
+        let schedule = try decoder.decode(Schedule.self, from: data)
         let allGames = schedule.dates.map {
             $0.games
         }.flatMap {

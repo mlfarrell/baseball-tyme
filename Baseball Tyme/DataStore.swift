@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 extension Date {
     var isThisWeek: Bool {
@@ -24,8 +25,9 @@ extension Date {
 }
 
 struct ArchivedData : Codable {
-    let teamName: String?
+    let currentTeamId: Int
     let team: Team
+    let allTeams: [Team]
     let games: [Game]
 }
 
@@ -40,11 +42,15 @@ class DataStore {
     static var mockStore: DataStore {
         let store = DataStore()
         
-        store.teamName = "San Diego Padres"
         store.loading = false
-        store.team = Team(id: 0, name: store.teamName, teamName: "Padres", link: nil)
+        store.team = Team(id: 1, name: store.teamName, teamName: "Padres", link: nil)
+        store.currentTeamId = 2
         store.games = [
             Game(teams: GameTeams(away: GameTeam(team: store.team!), home: GameTeam(team: store.team!)), gameDate: Date())
+        ]
+        store.allTeams = [
+            Team(id: 1, name: "San Diego Padres", teamName: "Padres", link: nil),
+            Team(id: 2, name: "Baltimore Orioles", teamName: "Orioles", link: nil)
         ]
         return store
     }
@@ -56,32 +62,40 @@ class DataStore {
     }
     
     init() {
-        _ = load()
+        try? load()
     }
     
-    func load() -> Bool {
-        guard let url =  cacheURL else { return false }
-        guard let data = try? Data(contentsOf: url) else { return false }
-        guard let unarchived = try? PropertyListDecoder().decode(ArchivedData.self, from: data) else { return false }
+    func load() throws {
+        guard let url =  cacheURL else { return }
+        let data = try Data(contentsOf: url)
+        let unarchived = try PropertyListDecoder().decode(ArchivedData.self, from: data)
         
-        if let name = unarchived.teamName {
-            self.teamName = name
-        }
+        self.currentTeamId = unarchived.currentTeamId
+        self.allTeams = unarchived.allTeams
         self.team = unarchived.team
         self.games = unarchived.games
-        return true
     }
     
     func save() {
-        guard let team, let games else { return }
-        guard let data = try? PropertyListEncoder().encode(ArchivedData(teamName: teamName, team: team, games: games)) else { return }
+        guard let team, let games, let allTeams else { return }
+        guard let data = try? PropertyListEncoder().encode(ArchivedData(currentTeamId: currentTeamId, team: team,  allTeams: allTeams, games: games)) else { return }
         guard let url =  cacheURL else { return }
                                                            
         try? data.write(to: url)
     }
                 
-    var teamName = "San Diego Padres"
-    var loading = true
+    let defaultTeamName = "San Diego Padres"
+    var teamName: String {
+        get {
+            return allTeams?.first { $0.id == currentTeamId }?.name ?? defaultTeamName
+        }
+    }
+    
+    var currentTeamId: Int = 0
+    var allTeams: [Team]?
     var team: Team?
     var games: [Game]?
+    
+    var loading = true
+    var errorState = false
 }

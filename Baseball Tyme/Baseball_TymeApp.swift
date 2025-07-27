@@ -19,7 +19,7 @@ struct Baseball_TymeApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView(data: data)
+            ContentView(data: $data)
         }
         .onChange(of: scenePhase) { _, newPhase in
             if scenePhase == .background {
@@ -37,22 +37,31 @@ struct Baseball_TymeApp: App {
 
         Task { [self] in
             await notificationManager.requestAuthorization()
-            guard await data.update() else { return }
             
-            if let games = data.games {
-                await notificationManager.scheduleOut(for: data.team?.teamName ?? "Baseball", with: games)
+            do {
+                try await data.update()
+                
+                if let games = data.games {
+                    await notificationManager.scheduleOut(for: data.team?.teamName ?? "Baseball", with: games)
+                }
+            } catch {
+                data.errorState = true
             }
         }
     }
     
     func handleAppRefresh(task: BGAppRefreshTask) {
         Task {
-            let success = await data.update()
-            
-            if let games = data.games {
-                await notificationManager.scheduleOut(for: data.team?.teamName ?? "Baseball", with: games)
+            do {
+                try await data.update()
+                
+                if let games = data.games {
+                    await notificationManager.scheduleOut(for: data.team?.teamName ?? "Baseball", with: games)
+                }
+                task.setTaskCompleted(success: true)
+            } catch {
+                task.setTaskCompleted(success: false)
             }
-            task.setTaskCompleted(success: success)
         }
     }
     
