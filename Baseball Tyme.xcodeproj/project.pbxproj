@@ -6,19 +6,91 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		270451A72E35AC4500D8FB05 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 270451A62E35AC4500D8FB05 /* WidgetKit.framework */; };
+		270451A92E35AC4500D8FB05 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 270451A82E35AC4500D8FB05 /* SwiftUI.framework */; };
+		270451B62E35AC4600D8FB05 /* ScheduleWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 270451A42E35AC4500D8FB05 /* ScheduleWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		270451B42E35AC4600D8FB05 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 27D5D3C22E3561710092726B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 270451A32E35AC4500D8FB05;
+			remoteInfo = ScheduleWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		270451B72E35AC4600D8FB05 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				270451B62E35AC4600D8FB05 /* ScheduleWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		270451A42E35AC4500D8FB05 /* ScheduleWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ScheduleWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		270451A62E35AC4500D8FB05 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		270451A82E35AC4500D8FB05 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		279E70262E35B0D800D03F9C /* ScheduleWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ScheduleWidgetExtension.entitlements; sourceTree = "<group>"; };
 		27D5D3CA2E3561710092726B /* Baseball Tyme.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Baseball Tyme.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		270451BA2E35AC4600D8FB05 /* Exceptions for "ScheduleWidget" folder in "ScheduleWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 270451A32E35AC4500D8FB05 /* ScheduleWidgetExtension */;
+		};
+		279E70282E35B14100D03F9C /* Exceptions for "Baseball Tyme" folder in "ScheduleWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				DataStore.swift,
+				Game.swift,
+			);
+			target = 270451A32E35AC4500D8FB05 /* ScheduleWidgetExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		270451AA2E35AC4500D8FB05 /* ScheduleWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				270451BA2E35AC4600D8FB05 /* Exceptions for "ScheduleWidget" folder in "ScheduleWidgetExtension" target */,
+			);
+			path = ScheduleWidget;
+			sourceTree = "<group>";
+		};
 		27D5D3CC2E3561710092726B /* Baseball Tyme */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				279E70282E35B14100D03F9C /* Exceptions for "Baseball Tyme" folder in "ScheduleWidgetExtension" target */,
+			);
 			path = "Baseball Tyme";
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		270451A12E35AC4500D8FB05 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				270451A92E35AC4500D8FB05 /* SwiftUI.framework in Frameworks */,
+				270451A72E35AC4500D8FB05 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		27D5D3C72E3561710092726B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -29,10 +101,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		270451A52E35AC4500D8FB05 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				270451A62E35AC4500D8FB05 /* WidgetKit.framework */,
+				270451A82E35AC4500D8FB05 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		27D5D3C12E3561710092726B = {
 			isa = PBXGroup;
 			children = (
+				279E70262E35B0D800D03F9C /* ScheduleWidgetExtension.entitlements */,
 				27D5D3CC2E3561710092726B /* Baseball Tyme */,
+				270451AA2E35AC4500D8FB05 /* ScheduleWidget */,
+				270451A52E35AC4500D8FB05 /* Frameworks */,
 				27D5D3CB2E3561710092726B /* Products */,
 			);
 			sourceTree = "<group>";
@@ -41,6 +125,7 @@
 			isa = PBXGroup;
 			children = (
 				27D5D3CA2E3561710092726B /* Baseball Tyme.app */,
+				270451A42E35AC4500D8FB05 /* ScheduleWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -48,6 +133,28 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		270451A32E35AC4500D8FB05 /* ScheduleWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 270451BB2E35AC4600D8FB05 /* Build configuration list for PBXNativeTarget "ScheduleWidgetExtension" */;
+			buildPhases = (
+				270451A02E35AC4500D8FB05 /* Sources */,
+				270451A12E35AC4500D8FB05 /* Frameworks */,
+				270451A22E35AC4500D8FB05 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				270451AA2E35AC4500D8FB05 /* ScheduleWidget */,
+			);
+			name = ScheduleWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = ScheduleWidgetExtension;
+			productReference = 270451A42E35AC4500D8FB05 /* ScheduleWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		27D5D3C92E3561710092726B /* Baseball Tyme */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 27D5D3D52E3561720092726B /* Build configuration list for PBXNativeTarget "Baseball Tyme" */;
@@ -55,10 +162,12 @@
 				27D5D3C62E3561710092726B /* Sources */,
 				27D5D3C72E3561710092726B /* Frameworks */,
 				27D5D3C82E3561710092726B /* Resources */,
+				270451B72E35AC4600D8FB05 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				270451B52E35AC4600D8FB05 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				27D5D3CC2E3561710092726B /* Baseball Tyme */,
@@ -80,6 +189,9 @@
 				LastSwiftUpdateCheck = 1640;
 				LastUpgradeCheck = 1640;
 				TargetAttributes = {
+					270451A32E35AC4500D8FB05 = {
+						CreatedOnToolsVersion = 16.4;
+					};
 					27D5D3C92E3561710092726B = {
 						CreatedOnToolsVersion = 16.4;
 					};
@@ -100,11 +212,19 @@
 			projectRoot = "";
 			targets = (
 				27D5D3C92E3561710092726B /* Baseball Tyme */,
+				270451A32E35AC4500D8FB05 /* ScheduleWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		270451A22E35AC4500D8FB05 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		27D5D3C82E3561710092726B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -115,6 +235,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		270451A02E35AC4500D8FB05 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		27D5D3C62E3561710092726B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -124,7 +251,71 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		270451B52E35AC4600D8FB05 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 270451A32E35AC4500D8FB05 /* ScheduleWidgetExtension */;
+			targetProxy = 270451B42E35AC4600D8FB05 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		270451B82E35AC4600D8FB05 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = ScheduleWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = PRTK9G57ZE;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ScheduleWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = ScheduleWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.vertostudio.Baseball-Tyme.ScheduleWidget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		270451B92E35AC4600D8FB05 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = ScheduleWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = PRTK9G57ZE;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ScheduleWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = ScheduleWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.vertostudio.Baseball-Tyme.ScheduleWidget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		27D5D3D32E3561720092726B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -251,6 +442,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Baseball Tyme/Baseball Tyme.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = PRTK9G57ZE;
@@ -280,6 +472,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Baseball Tyme/Baseball Tyme.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = PRTK9G57ZE;
@@ -307,6 +500,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		270451BB2E35AC4600D8FB05 /* Build configuration list for PBXNativeTarget "ScheduleWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				270451B82E35AC4600D8FB05 /* Debug */,
+				270451B92E35AC4600D8FB05 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		27D5D3C52E3561710092726B /* Build configuration list for PBXProject "Baseball Tyme" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

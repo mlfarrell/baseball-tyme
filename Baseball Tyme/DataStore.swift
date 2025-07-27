@@ -32,7 +32,8 @@ struct ArchivedData : Codable {
 @Observable
 class DataStore {
     var cacheURL: URL? {
-        guard let url = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first else { return nil }
+        guard let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.vertostudio.baseball-tyme") else { return nil }
+        //guard let url = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first else { return nil }
         return url.appendingPathComponent("cacheData", conformingTo: .propertyList)
     }
     
@@ -52,6 +53,10 @@ class DataStore {
         return games?.filter { game in
             game.gameDate.isToday
         }
+    }
+    
+    init() {
+        _ = load()
     }
     
     func load() -> Bool {
@@ -74,19 +79,7 @@ class DataStore {
                                                            
         try? data.write(to: url)
     }
-            
-    func update(fromDisk: Bool = true) async -> Bool {
-        if load() {
-            loading = false
-        }
-        
-        guard let teamResponse = await BaseballAPI.getTeam(named: teamName) else { return false }
-        self.team = teamResponse
-        self.games = await BaseballAPI.getGames(for: teamResponse)
-        loading = false
-        return true
-    }
-    
+                
     var teamName = "San Diego Padres"
     var loading = true
     var team: Team?
