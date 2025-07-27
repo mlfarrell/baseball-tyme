@@ -56,7 +56,7 @@ struct ContentView: View {
                         .padding(.bottom, 5)
                     if let game = data?.todaysGames?.first {
                         let have = game.gameDate > Date() ? "have" : "had"
-                        Text("\(have) a game tody at \(game.formattedDate ?? "")")
+                        Text("\(have) a game today at \(game.formattedDate ?? "")")
                     } else {
                         Text("do not play today")
                     }

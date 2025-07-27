@@ -21,19 +21,12 @@ struct Provider: TimelineProvider {
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
-        var entries: [SimpleEntry] = []
-
         let nextGame = data.games?.first { game in
             game.gameDate > Date()
         }
-        let currentDate = Date()
-        for hourOffset in 0 ..< 5 {
-            let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
-            let entry = SimpleEntry(date: entryDate, gameDate: nextGame?.gameDate)
-            entries.append(entry)
-        }
+        let entry = SimpleEntry(date: nextGame?.gameDate ?? Date(), gameDate: nextGame?.gameDate)
 
-        let timeline = Timeline(entries: entries, policy: .atEnd)
+        let timeline = Timeline(entries: [entry], policy: .atEnd)
         completion(timeline)
     }
 }
@@ -90,7 +83,7 @@ struct ScheduleWidget: Widget {
         }
         .configurationDisplayName("Baseball Widget")
         .description("Baseball schedule widget")
-        .supportedFamilies([.accessoryInline, .accessoryCircular, .accessoryRectangular])
+        .supportedFamilies([.accessoryInline, .accessoryRectangular])
     }
 }
 
