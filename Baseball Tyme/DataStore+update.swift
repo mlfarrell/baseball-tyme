@@ -16,22 +16,22 @@ extension DataStore {
         }
     }
     
-    func update(fromDisk: Bool = true) async throws {
-        if fromDisk {
-            do {
-                try load()
-                loading = false
-            }
-            catch {
-                //carry on and load from API
-            }
+    func update(onlyFromDisk: Bool = false) async throws {        
+        do {
+            try load()
+            loading = false
+        }
+        catch {
+            //carry on and load from API
         }
         
-        let majorLeagues = try await BaseballAPI.getMajorLeagues()
-        let teamsResponse = try await BaseballAPI.getAllTeams(in: majorLeagues)
-        self.allTeams = teamsResponse
-
-        try await updateGames()
-        loading = false
+        if !onlyFromDisk {
+            let majorLeagues = try await BaseballAPI.getMajorLeagues()
+            let teamsResponse = try await BaseballAPI.getAllTeams(in: majorLeagues)
+            self.allTeams = teamsResponse
+            
+            try await updateGames()
+            loading = false
+        }
     }
 }

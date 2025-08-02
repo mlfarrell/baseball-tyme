@@ -23,6 +23,9 @@ class NotificationManager: NSObject {
     }
     
     func scheduleOut(for team: String, with games: [Game]) async {
+        let notificationCenter = UNUserNotificationCenter.current()
+        notificationCenter.removeAllPendingNotificationRequests()
+
         for game in games {
             guard game.gameDate > Date(), game.gameDate.isThisWeek else { continue }
             
@@ -41,9 +44,8 @@ class NotificationManager: NSObject {
             let uuidString = UUID().uuidString
             let request = UNNotificationRequest(identifier: uuidString, content: content, trigger: trigger)
             
-            print("Scheduling game on \(game.gameDate)...")
+            print("Scheduling game on \(game.gameDate.formatted())...")
             
-            let notificationCenter = UNUserNotificationCenter.current()
             do {
                 try await notificationCenter.add(request)
             } catch {

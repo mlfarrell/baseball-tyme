@@ -22,7 +22,12 @@ struct Baseball_TymeApp: App {
             ContentView(data: $data)
         }
         .onChange(of: scenePhase) { _, newPhase in
-            if scenePhase == .background {
+            if scenePhase == .active {
+                Task {
+                    data.loading = true
+                    try await data.update(onlyFromDisk: true)
+                }
+            } else if scenePhase == .background {
                 data.save()
                 
                 scheduleBackgroundRefresh()
@@ -49,7 +54,7 @@ struct Baseball_TymeApp: App {
             }
         }
     }
-    
+        
     func handleAppRefresh(task: BGAppRefreshTask) {
         Task {
             do {

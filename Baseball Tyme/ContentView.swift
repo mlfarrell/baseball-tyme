@@ -34,11 +34,7 @@ struct ContentView: View {
     //let data: DataStore?
     @Binding var data: DataStore
     @State var configViewState = ConfigViewState()
-    
-    func update() async throws {
-        try await data.update()
-    }
-    
+        
     var body: some View {
         ZStack {
             Color.clear.overlay {
