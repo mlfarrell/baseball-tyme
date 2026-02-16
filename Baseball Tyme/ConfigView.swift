@@ -43,7 +43,7 @@ struct ConfigView: View {
         }
         .padding([.top, .leading, .bottom])
         .foregroundStyle(.primary)
-        .background(.ultraThinMaterial)
+        //.background(.ultraThinMaterial)
     }
 }
 

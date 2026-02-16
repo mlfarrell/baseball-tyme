@@ -43,14 +43,14 @@ class DataStore {
         let store = DataStore()
         
         store.loading = false
-        store.team = Team(id: 1, name: store.teamName, teamName: "Padres", link: nil)
+        store.team = Team(id: 1, name: store.teamName, teamName: "Padres", abbreviation: "SD", link: nil)
         store.currentTeamId = 2
         store.games = [
             Game(teams: GameTeams(away: GameTeam(team: store.team!), home: GameTeam(team: store.team!)), gameDate: Date())
         ]
         store.allTeams = [
-            Team(id: 1, name: "San Diego Padres", teamName: "Padres", link: nil),
-            Team(id: 2, name: "Baltimore Orioles", teamName: "Orioles", link: nil)
+            Team(id: 1, name: "San Diego Padres", teamName: "Padres", abbreviation: "SD", link: nil),
+            Team(id: 2, name: "Baltimore Orioles", teamName: "Orioles", abbreviation: "BAL", link: nil)
         ]
         return store
     }
@@ -89,6 +89,10 @@ class DataStore {
         get {
             return allTeams?.first { $0.id == currentTeamId }?.name ?? defaultTeamName
         }
+    }
+    
+    func teamAbbreviation(id: Int) -> String {
+        return allTeams?.first { $0.id == id }?.abbreviation ?? "Unk"
     }
     
     var currentTeamId: Int = 0

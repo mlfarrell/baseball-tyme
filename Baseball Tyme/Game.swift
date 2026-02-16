@@ -31,6 +31,7 @@ struct Team : Codable {
     let id: Int
     let name: String //"San Diego Padres"
     let teamName: String?
+    let abbreviation: String?
     let link: URL?
 }
 

@@ -12,11 +12,11 @@ struct Provider: TimelineProvider {
     let data = DataStore()
     
     func placeholder(in context: Context) -> SimpleEntry {
-        SimpleEntry(date: Date(), gameDate: nil)
+        SimpleEntry(date: Date(), gameDate: nil, homeTeam: nil)
     }
 
     func getSnapshot(in context: Context, completion: @escaping (SimpleEntry) -> ()) {
-        let entry = SimpleEntry(date: Date(), gameDate: nil)
+        let entry = SimpleEntry(date: Date(), gameDate: nil, homeTeam: nil)
         completion(entry)
     }
 
@@ -35,8 +35,9 @@ struct Provider: TimelineProvider {
             let game = games[i]
             let previousGameDate = ((i > 0) ? games[i-1].gameDate : nil) ?? Date()
             let showAfter = Calendar.current.date(byAdding: .hour, value: 3, to: previousGameDate)
-                        
-            return SimpleEntry(date: showAfter ?? Date(), gameDate: game.gameDate)
+            let homeTeam = data.teamAbbreviation(id: game.teams.home.team.id)
+            
+            return SimpleEntry(date: showAfter ?? Date(), gameDate: game.gameDate, homeTeam: homeTeam)
         }
 
         let timeline = Timeline(entries: entries, policy: .atEnd)
@@ -47,29 +48,78 @@ struct Provider: TimelineProvider {
 struct SimpleEntry: TimelineEntry {
     let date: Date
     let gameDate: Date?
+    let homeTeam: String?
 }
 
 struct ScheduleWidgetEntryView : View {
+    @Environment(\.colorScheme) var colorScheme
+    @Environment(\.widgetFamily) var widgetFamily
+    @Environment(\.widgetRenderingMode) var renderingMode
+
     var entry: Provider.Entry
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 3) {
-            Text("Next Game")
-                .padding(.bottom, 10)
-            if entry.gameDate != nil {
-                HStack {
-                    Image(systemName: "baseball")
-                    HStack {
-                        Text(entry.gameDate!.formatted(.dateTime.weekday()))
-                        Text(entry.gameDate!.formatted(.dateTime.day()))
+        ZStack {
+            if renderingMode == .fullColor {
+                switch widgetFamily {
+                case .systemSmall, .systemMedium, .systemLarge, .systemExtraLarge:
+                    Image("smallerBg")
+                        .blur(radius: 2)
+                        .saturation(0.2)
+                    if colorScheme == .light {
+                        Rectangle()
+                            .fill(
+                                LinearGradient(gradient: Gradient(colors: [.white, .gray]), startPoint: .top, endPoint: .bottom)
+                            )
+                            .opacity(0.7)
+                            .blendMode(.lighten)
+                    } else {
+                        Rectangle()
+                            .fill(
+                                LinearGradient(gradient: Gradient(colors: [.white, .black]), startPoint: .top, endPoint: .bottom)
+                            )
+                            .opacity(0.75)
+                            .blendMode(.multiply)
                     }
-                }
-                HStack {
-                    Image(systemName: "baseball.circle")
-                    Text(entry.gameDate!, style: .time)
+                default:
+                    EmptyView()
                 }
             } else {
-                Text("Unknown")
+                EmptyView()
+            }
+
+            VStack(alignment: .leading, spacing: 3) {
+                Text("Next Game")
+                    .padding(.bottom, 10)
+                if entry.gameDate != nil, entry.homeTeam != nil {
+                    HStack {
+                        Image(systemName: "baseball")
+                        HStack {
+                            Text(entry.gameDate!.formatted(.dateTime.weekday()))
+                            Text("\(entry.gameDate!.formatted(.dateTime.month(.defaultDigits)))/\(entry.gameDate!.formatted(.dateTime.day()))")
+                        }
+                        .minimumScaleFactor(0.75)
+                    }
+                    HStack {
+                        Image(systemName: "baseball.circle")
+                        Text(entry.gameDate!, style: .time)
+                            .minimumScaleFactor(0.75)
+                            .lineLimit(1)
+                    }
+                    switch widgetFamily {
+                        case .systemSmall, .systemMedium, .systemLarge, .systemExtraLarge:
+                        HStack {
+                            Image(systemName: "at.circle")
+                            Text(entry.homeTeam!)
+                                .minimumScaleFactor(0.75)
+                                .lineLimit(1)
+                        }
+                        default:
+                            EmptyView()
+                    }
+                } else {
+                    Text("Unknown")
+                }
             }
         }
         .font(Font.custom("American Typewriter", size: 16))
@@ -96,12 +146,12 @@ struct ScheduleWidget: Widget {
         }
         .configurationDisplayName("Baseball Widget")
         .description("Baseball schedule widget")
-        .supportedFamilies([.accessoryInline, .accessoryRectangular, .systemSmall, .systemMedium, ])
+        .supportedFamilies([.accessoryRectangular, .systemSmall, .systemMedium, ])
     }
 }
 
 #Preview(as: .systemSmall) {
     ScheduleWidget()
 } timeline: {
-    SimpleEntry(date: .now, gameDate: .now)
+    SimpleEntry(date: .now, gameDate: .now, homeTeam: "San")
 }

@@ -34,6 +34,22 @@ struct ContentView: View {
     //let data: DataStore?
     @Binding var data: DataStore
     @State var configViewState = ConfigViewState()
+    
+    var gameView: some View {
+        VStack {
+            Text(data.team?.name ?? "Team Name")
+                .font(Font.custom("American Typewriter", size: 24))
+                .padding(.bottom, 5)
+            if let game = data.todaysGames?.first {
+                let have = game.gameDate > Date() ? "have" : "had"
+                Text("\(have) a game today at \(game.formattedDate ?? "")")
+            } else {
+                Text("do not play today")
+            }
+        }
+        .foregroundColor(.black)
+        .padding(25)
+    }
         
     var body: some View {
         ZStack {
@@ -42,6 +58,7 @@ struct ContentView: View {
                     .resizable()
                     .scaledToFill()
                     .saturation(0.2)
+                    .brightness(0.2)
                     .edgesIgnoringSafeArea(.all)
             }
             Rectangle()
@@ -54,22 +71,15 @@ struct ContentView: View {
             if data.loading == false {
                 VStack {
                     Spacer()
-                    VStack {
-                        Text(data.team?.name ?? "Team Name")
-                            .font(Font.custom("American Typewriter", size: 24))
-                            .padding(.bottom, 5)
-                        if let game = data.todaysGames?.first {
-                            let have = game.gameDate > Date() ? "have" : "had"
-                            Text("\(have) a game today at \(game.formattedDate ?? "")")
-                        } else {
-                            Text("do not play today")
-                        }
+                    if #available(iOS 26.0, *) {
+                        gameView
+                            .glassEffect(.clear, in: .rect(cornerRadius: 25.0))
                     }
-                    .foregroundColor(.black)
-                    .padding()
-                    .background(.white)
-                    .cornerRadius(14)
-                    
+                    else {
+                        gameView
+                            .background(.white)
+                            .cornerRadius(14)
+                    }
                     Spacer()
                     
                     HStack {
